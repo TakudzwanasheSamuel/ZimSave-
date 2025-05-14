@@ -19,7 +19,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarInset,
-  SidebarSeparator,
+  SidebarSeparator, // This is the UI component from '@/components/ui/sidebar'
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
@@ -35,6 +35,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils"; // Added this import
 
 interface NavItem {
   href: string;
@@ -60,7 +61,7 @@ function UserProfileSidebarFooter() {
 
   return (
     <>
-      <SidebarSeparator />
+      <SidebarSeparator /> {/* This is the UI component */}
       <div className="p-2">
         <Link href="#" passHref legacyBehavior>
           <SidebarMenuButton
