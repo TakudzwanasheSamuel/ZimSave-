@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react"; // Added useEffect
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shared/page-header";
 import { GroupCard, type MukandoGroup } from "@/components/mukando/group-card";
@@ -10,10 +10,9 @@ import { PlusCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle as ShadcnCardTitle } from "@/components/ui/card";
-import type { Transaction } from "@/types/wallet"; // Import Transaction type
-import { useToast } from "@/hooks/use-toast"; // Import useToast
+import type { Transaction } from "@/types/wallet";
+import { useToast } from "@/hooks/use-toast";
 
-// Constants for localStorage keys
 const MUKANDO_GROUPS_STORAGE_KEY = "zimsave_mukando_groups_v1";
 const WALLET_STATE_KEY = "zimsave_wallet_state_v1";
 
@@ -26,11 +25,11 @@ const initialGroups: MukandoGroup[] = [
   {
     id: "1",
     name: "Sunrise Savers",
-    contributionAmount: 5, 
+    contributionAmount: 5,
     contributionFrequency: "weekly",
     members: 10,
-    currentPool: 50, 
-    targetPool: 200, 
+    currentPool: 50,
+    targetPool: 200,
     description: "Saving for small personal goals.",
     upcomingNeeds: "School fees for next term.",
     activeLoanAmount: 0,
@@ -38,11 +37,11 @@ const initialGroups: MukandoGroup[] = [
   {
     id: "2",
     name: "Micro Venture Fund",
-    contributionAmount: 10, 
+    contributionAmount: 10,
     contributionFrequency: "monthly",
     members: 5,
-    currentPool: 50, 
-    targetPool: 250, 
+    currentPool: 50,
+    targetPool: 250,
     description: "Pooling funds for tiny business ideas.",
     upcomingNeeds: "Purchase of new inventory.",
     activeLoanAmount: 0,
@@ -50,10 +49,10 @@ const initialGroups: MukandoGroup[] = [
   {
     id: "3",
     name: "Neighborly Support",
-    contributionAmount: 2, 
+    contributionAmount: 2,
     contributionFrequency: "weekly",
     members: 15,
-    currentPool: 30, 
+    currentPool: 30,
     description: "Small contributions for mutual support.",
     upcomingNeeds: "Community hall repairs.",
     activeLoanAmount: 0,
@@ -63,23 +62,37 @@ const initialGroups: MukandoGroup[] = [
 export default function MukandoPage() {
   const [groups, setGroups] = useState<MukandoGroup[]>([]);
   const [isCreateGroupDialogOpen, setCreateGroupDialogOpen] = useState(false);
-  const [userWalletBalance, setUserWalletBalance] = useState(0); // For LoanRequestDialog
+  const [userWalletBalance, setUserWalletBalance] = useState(0);
   const { toast } = useToast();
 
-  // Load groups and user wallet balance from localStorage
   useEffect(() => {
-    const storedGroups = localStorage.getItem(MUKANDO_GROUPS_STORAGE_KEY);
-    if (storedGroups) {
+    const storedGroupsRaw = localStorage.getItem(MUKANDO_GROUPS_STORAGE_KEY);
+    let userHasExistingGroups = false;
+
+    if (storedGroupsRaw) {
       try {
-        setGroups(JSON.parse(storedGroups));
+        const parsedGroups = JSON.parse(storedGroupsRaw);
+        if (Array.isArray(parsedGroups) && parsedGroups.length > 0) {
+          setGroups(parsedGroups);
+          userHasExistingGroups = true;
+        }
+        // If parsedGroups is an empty array, userHasExistingGroups remains false,
+        // and it will fall through to set initialGroups.
       } catch (e) {
-        console.error("Error parsing Mukando groups from localStorage", e);
-        setGroups(initialGroups); // Fallback to initial if parsing fails
+        console.error("Error parsing Mukando groups from localStorage, falling back to initial groups", e);
+        // Fall through to set initialGroups if parsing fails
       }
-    } else {
-      setGroups(initialGroups); // Initialize with default if nothing stored
     }
 
+    if (!userHasExistingGroups) {
+      setGroups(initialGroups);
+      // Persist initialGroups if no valid user groups were found in localStorage,
+      // or if localStorage was empty/invalid or contained an empty array.
+      // This ensures the "default" groups are shown and saved for the next load.
+      localStorage.setItem(MUKANDO_GROUPS_STORAGE_KEY, JSON.stringify(initialGroups));
+    }
+
+    // Load wallet balance (existing logic)
     const storedWalletState = localStorage.getItem(WALLET_STATE_KEY);
     if (storedWalletState) {
       try {
@@ -89,12 +102,19 @@ export default function MukandoPage() {
         console.error("Error parsing wallet state for balance", e);
       }
     }
-  }, []);
+  }, []); // Empty dependency array, runs once on mount
 
   // Save groups to localStorage whenever they change
   useEffect(() => {
-    if (groups.length > 0 || localStorage.getItem(MUKANDO_GROUPS_STORAGE_KEY)) { // Avoid writing initial empty array if it wasn't there
-        localStorage.setItem(MUKANDO_GROUPS_STORAGE_KEY, JSON.stringify(groups));
+    // This condition aims to avoid overwriting localStorage with an empty `groups` array
+    // during the initial render cycle before the loading useEffect has populated `groups`.
+    // After the first load, `groups` will either be user's groups or `initialGroups`.
+    // So, any subsequent changes (add, delete, update group) will be saved.
+    // If groups becomes an empty array due to user action (e.g., deleting all groups),
+    // that empty array will be saved. On next load, the first useEffect will then
+    // re-populate with initialGroups.
+    if (groups.length > 0 || localStorage.getItem(MUKANDO_GROUPS_STORAGE_KEY)) {
+      localStorage.setItem(MUKANDO_GROUPS_STORAGE_KEY, JSON.stringify(groups));
     }
   }, [groups]);
 
@@ -119,7 +139,6 @@ export default function MukandoPage() {
   };
 
   const handleRequestLoan = (groupId: string, loanAmount: number) => {
-    // 1. Update the specific group's pool and active loan amount
     let groupNameForToast = "";
     setGroups(prevGroups =>
       prevGroups.map(g => {
@@ -135,7 +154,6 @@ export default function MukandoPage() {
       })
     );
 
-    // 2. Update the user's main wallet (localStorage)
     const storedWalletState = localStorage.getItem(WALLET_STATE_KEY);
     let currentWallet: WalletState = { balance: 0, transactions: [] };
     if (storedWalletState) {
@@ -143,7 +161,6 @@ export default function MukandoPage() {
         currentWallet = JSON.parse(storedWalletState);
       } catch (e) {
         console.error("Error parsing wallet state for loan disbursal", e);
-        // Potentially handle this error, e.g., by not proceeding or toasting an error
         toast({ title: "Wallet Error", description: "Could not update wallet due to an error.", variant: "destructive" });
         return;
       }
@@ -164,7 +181,7 @@ export default function MukandoPage() {
       transactions: [newTransaction, ...currentWallet.transactions],
     };
     localStorage.setItem(WALLET_STATE_KEY, JSON.stringify(updatedWalletState));
-    setUserWalletBalance(newBalance); // Update local state for dialog
+    setUserWalletBalance(newBalance);
 
     toast({
         title: "Loan Disbursed",
@@ -200,7 +217,7 @@ export default function MukandoPage() {
         <Card className="mt-6 text-center">
           <CardHeader>
             <ShadcnCardTitle>No Groups Yet</ShadcnCardTitle> 
-            <CardDescription>Start by creating your first Mukando group.</CardDescription>
+            <CardDescription>Start by creating your first Mukando group or refresh if you expected default groups.</CardDescription>
           </CardHeader>
           <CardContent>
             <Image src="https://placehold.co/300x200.png" alt="No groups placeholder" width={300} height={200} className="mx-auto rounded-md mb-4" data-ai-hint="empty state illustration" />
@@ -216,8 +233,8 @@ export default function MukandoPage() {
               key={group.id} 
               group={group} 
               onTrackContribution={handleTrackContribution}
-              onRequestLoan={handleRequestLoan} // Pass the new handler
-              userWalletBalance={userWalletBalance} // Pass user's wallet balance
+              onRequestLoan={handleRequestLoan}
+              userWalletBalance={userWalletBalance}
             />
           ))}
         </div>
@@ -225,3 +242,4 @@ export default function MukandoPage() {
     </div>
   );
 }
+
