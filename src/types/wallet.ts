@@ -1,7 +1,7 @@
 
 export interface Transaction {
   id: string;
-  type: "deposit" | "withdrawal" | "transfer_in" | "transfer_out" | "mukando" | "goal_contribution" | "purchase" | "fee";
+  type: "deposit" | "withdrawal" | "transfer_in" | "transfer_out" | "mukando" | "goal_contribution" | "purchase" | "fee" | "loan_received";
   amount: number;
   description: string;
   date: string; // ISO string

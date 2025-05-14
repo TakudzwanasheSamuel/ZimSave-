@@ -1,7 +1,7 @@
 
 import { cn } from "@/lib/utils";
-import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, PiggyBank, AlertTriangle, Target } from "lucide-react";
-import type { Transaction } from "@/types/wallet"; // Updated import path
+import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, Target, AlertTriangle, HandCoins } from "lucide-react";
+import type { Transaction } from "@/types/wallet"; 
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -12,13 +12,15 @@ const getTransactionIcon = (type: Transaction["type"]) => {
     case "deposit":
     case "transfer_in":
       return <ArrowDownLeft className="h-5 w-5 text-green-500" />;
+    case "loan_received": // Added case for loan_received
+      return <HandCoins className="h-5 w-5 text-green-500" />; // Using HandCoins for loan received
     case "withdrawal":
     case "transfer_out":
       return <ArrowUpRight className="h-5 w-5 text-red-500" />;
     case "mukando":
       return <Users className="h-5 w-5 text-blue-500" />;
     case "goal_contribution":
-      return <Target className="h-5 w-5 text-purple-500" />; // Changed from PiggyBank for goal_contribution
+      return <Target className="h-5 w-5 text-purple-500" />; 
     case "purchase":
       return <ShoppingCart className="h-5 w-5 text-orange-500" />;
     default:
@@ -27,10 +29,9 @@ const getTransactionIcon = (type: Transaction["type"]) => {
 };
 
 export function TransactionItem({ transaction }: TransactionItemProps) {
-  const isCredit = transaction.type === "deposit" || transaction.type === "transfer_in";
-  // For goal contributions, treat as a "debit" from main balance perspective, but icon is specific
-  const amountColor = (transaction.type === "deposit" || transaction.type === "transfer_in") ? "text-green-600" : "text-red-600";
-  const amountPrefix = (transaction.type === "deposit" || transaction.type === "transfer_in") ? "+" : "-";
+  const isCredit = transaction.type === "deposit" || transaction.type === "transfer_in" || transaction.type === "loan_received";
+  const amountColor = isCredit ? "text-green-600" : "text-red-600";
+  const amountPrefix = isCredit ? "+" : "-";
 
 
   return (
