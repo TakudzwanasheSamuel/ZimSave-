@@ -1,0 +1,22 @@
+
+{
+  "name": "ZimVest",
+  "short_name": "ZimVest",
+  "description": "Fintech and HealthTech for Zimbabwe's informal sector.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#002E5D",
+  "theme_color": "#002E5D",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
