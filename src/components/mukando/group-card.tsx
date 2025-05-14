@@ -1,9 +1,24 @@
 
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Users, DollarSign, CalendarDays, ArrowRight } from "lucide-react";
+import { Users, DollarSign, CalendarDays, ArrowRight, Lightbulb, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { summarizeGroupSavings, type SummarizeGroupSavingsOutput } from "@/ai/flows/summarize-group-savings";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export interface MukandoGroup {
   id: string;
@@ -12,8 +27,9 @@ export interface MukandoGroup {
   contributionFrequency: string;
   members: number;
   currentPool: number;
-  targetPool?: number; 
+  targetPool?: number;
   description?: string;
+  upcomingNeeds?: string; // Added for AI summary
 }
 
 interface GroupCardProps {
@@ -23,6 +39,10 @@ interface GroupCardProps {
 
 export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
   const { toast } = useToast();
+  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [isSummaryDialogOpn, setIsSummaryDialogOpen] = useState(false);
+
   const progress = group.targetPool ? (group.currentPool / group.targetPool) * 100 : 0;
 
   const handleTrackContribution = () => {
@@ -33,7 +53,33 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
       className: "bg-accent text-accent-foreground"
     });
   };
-  
+
+  const handleGetAiSummary = async () => {
+    setIsLoadingSummary(true);
+    setAiSummary(null);
+    try {
+      const summaryInput = {
+        groupName: group.name,
+        currentSavings: group.currentPool,
+        upcomingNeeds: group.upcomingNeeds || "Not specified",
+        contributionAmount: group.contributionAmount,
+        contributionFrequency: group.contributionFrequency,
+      };
+      const result: SummarizeGroupSavingsOutput = await summarizeGroupSavings(summaryInput);
+      setAiSummary(result.summary);
+      setIsSummaryDialogOpen(true);
+    } catch (error) {
+      console.error("Failed to get AI summary:", error);
+      toast({
+        title: "AI Summary Error",
+        description: "Could not generate summary. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingSummary(false);
+    }
+  };
+
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between">
       <CardHeader>
@@ -67,15 +113,48 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
             <p className="text-xs text-muted-foreground mt-1">Target: ${group.targetPool.toFixed(2)} USD</p>
           </div>
         )}
+        {group.upcomingNeeds && (
+          <p className="text-xs text-muted-foreground italic">Upcoming needs: {group.upcomingNeeds}</p>
+        )}
       </CardContent>
-      <CardFooter className="flex justify-end space-x-2">
-        <Button variant="outline" size="sm">
+      <CardFooter className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+        <Button variant="outline" size="sm" className="w-full sm:w-auto">
           View Details <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
-        <Button size="sm" onClick={handleTrackContribution} className="bg-secondary hover:bg-secondary/90 text-primary-foreground">
+        <Button size="sm" onClick={handleTrackContribution} className="bg-secondary hover:bg-secondary/90 text-primary-foreground w-full sm:w-auto">
           Track Contribution
         </Button>
+        <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGetAiSummary}
+            disabled={isLoadingSummary}
+            className="w-full sm:w-auto border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+        >
+            {isLoadingSummary ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+                <Lightbulb className="mr-2 h-4 w-4" />
+            )}
+            AI Summary
+        </Button>
       </CardFooter>
+
+      {aiSummary && (
+        <AlertDialog open={isSummaryDialogOpn} onOpenChange={setIsSummaryDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>AI Summary for {group.name}</AlertDialogTitle>
+              <AlertDialogDescription className="whitespace-pre-wrap">
+                {aiSummary}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setIsSummaryDialogOpen(false)}>Got it!</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </Card>
   );
 }

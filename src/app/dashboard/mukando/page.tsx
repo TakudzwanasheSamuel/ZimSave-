@@ -15,32 +15,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle as ShadcnCard
 const initialGroups: MukandoGroup[] = [
   {
     id: "1",
-    name: "Sunrise Savers", // Renamed
+    name: "Sunrise Savers",
     contributionAmount: 5, // USD
     contributionFrequency: "weekly",
     members: 10,
     currentPool: 50, // USD
     targetPool: 200, // USD
     description: "Saving for small personal goals.",
+    upcomingNeeds: "School fees for next term.",
   },
   {
     id: "2",
-    name: "Micro Venture Fund", // Renamed
+    name: "Micro Venture Fund",
     contributionAmount: 10, // USD
     contributionFrequency: "monthly",
     members: 5,
     currentPool: 50, // USD
     targetPool: 250, // USD
     description: "Pooling funds for tiny business ideas.",
+    upcomingNeeds: "Purchase of new inventory.",
   },
   {
     id: "3",
-    name: "Neighborly Support", // Renamed
+    name: "Neighborly Support",
     contributionAmount: 2, // USD
     contributionFrequency: "weekly",
     members: 15,
     currentPool: 30, // USD
     description: "Small contributions for mutual support.",
+    upcomingNeeds: "Community hall repairs.",
   },
 ];
 
@@ -53,8 +56,8 @@ export default function MukandoPage() {
   };
 
   const handleTrackContribution = (groupId: string, amount: number) => {
-    setGroups(prevGroups => 
-      prevGroups.map(g => 
+    setGroups(prevGroups =>
+      prevGroups.map(g =>
         g.id === groupId ? { ...g, currentPool: g.currentPool + amount } : g
       )
     );

@@ -14,9 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import type { MukandoGroup } from "./group-card"; // Ensure type is imported
 
 interface CreateGroupFormProps {
-  onGroupCreate: (group: any) => void; // Replace 'any' with a proper group type
+  onGroupCreate: (group: MukandoGroup) => void;
   setOpen: (open: boolean) => void;
 }
 
@@ -25,6 +26,7 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
   const [contributionAmount, setContributionAmount] = useState("");
   const [contributionFrequency, setContributionFrequency] = useState("weekly");
   const [description, setDescription] = useState("");
+  const [upcomingNeeds, setUpcomingNeeds] = useState(""); // New state for upcoming needs
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,13 +39,14 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
       });
       return;
     }
-    const newGroup = {
-      id: Date.now().toString(), 
+    const newGroup: MukandoGroup = {
+      id: Date.now().toString(),
       name: groupName,
       contributionAmount: parseFloat(contributionAmount),
       contributionFrequency,
       description,
-      members: 1, 
+      upcomingNeeds: upcomingNeeds.trim() || "Not specified", // Add upcoming needs
+      members: 1,
       currentPool: 0,
     };
     onGroupCreate(newGroup);
@@ -51,7 +54,13 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
       title: "Group Created!",
       description: `"${groupName}" has been successfully created.`,
     });
-    setOpen(false); 
+    setOpen(false);
+    // Reset form fields
+    setGroupName("");
+    setContributionAmount("");
+    setContributionFrequency("weekly");
+    setDescription("");
+    setUpcomingNeeds("");
   };
 
   return (
@@ -99,6 +108,15 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="A brief description of the group's purpose."
+        />
+      </div>
+      <div>
+        <Label htmlFor="upcomingNeeds">Upcoming Needs (Optional)</Label>
+        <Textarea
+          id="upcomingNeeds"
+          value={upcomingNeeds}
+          onChange={(e) => setUpcomingNeeds(e.target.value)}
+          placeholder="e.g., School fees, new inventory, event planning."
         />
       </div>
       <div className="flex justify-end space-x-2 pt-2">
