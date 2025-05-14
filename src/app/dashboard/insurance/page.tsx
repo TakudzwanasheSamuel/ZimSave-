@@ -15,50 +15,50 @@ const availablePoliciesData: HealthPolicy[] = [
   {
     id: "basic_health_cover",
     name: "Basic Health Cover",
-    premium: 500,
+    premium: 200, // Updated from 500
     frequency: "monthly",
     coverageHighlights: ["GP Consultations", "Prescribed Medication (Basic)", "Emergency Ambulance"],
     icon: Heart,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "medical health",
-    annualLimit: 50000,
+    annualLimit: 25000, // Adjusted for lower premium
     details: "Essential health services for peace of mind. Covers day-to-day medical needs and basic emergencies."
   },
   {
     id: "family_vitality_plan",
     name: "Family Vitality Plan",
-    premium: 1800,
+    premium: 750, // Updated from 1800
     frequency: "monthly",
-    coverageHighlights: ["Covers 2 Adults + 3 Children", "Specialist Visits", "Maternity Benefits (Waiting Period Applies)"],
+    coverageHighlights: ["Covers 2 Adults + 2 Children", "Select Specialist Visits", "Basic Maternity Benefits (Waiting Period Applies)"],
     icon: Users,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "family protection",
-    annualLimit: 200000,
-    details: "Comprehensive cover for the whole family, ensuring everyone has access to quality healthcare."
+    annualLimit: 100000, // Adjusted
+    details: "Affordable cover for the whole family, ensuring access to essential healthcare when needed."
   },
   {
     id: "senior_wellness_shield",
     name: "Senior Wellness Shield",
-    premium: 950,
+    premium: 400, // Updated from 950
     frequency: "monthly",
-    coverageHighlights: ["Chronic Condition Management", "Annual Health Checks", "Optical & Dental (Limited)"],
+    coverageHighlights: ["Chronic Condition Support", "Annual Health Check-up", "Limited Optical & Dental"],
     icon: ShieldCheck,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "elderly care",
-    annualLimit: 100000,
-    details: "Tailored for seniors, focusing on wellness, chronic care, and maintaining a healthy lifestyle."
+    annualLimit: 60000, // Adjusted
+    details: "Tailored for seniors, focusing on wellness, chronic care support, and maintaining a healthy lifestyle."
   },
    {
     id: "accident_protect_plus",
     name: "Accident Protect Plus",
-    premium: 300,
+    premium: 150, // Updated from 300
     frequency: "monthly",
-    coverageHighlights: ["Accidental Injury Treatment", "Hospital Cash (Per Day)", "Disability Cover (Partial)"],
+    coverageHighlights: ["Accidental Injury Treatment (Basic)", "Hospital Cash (Limited Days)", "Partial Disability Support"],
     icon: Briefcase,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "safety insurance",
-    annualLimit: 75000,
-    details: "Provides financial support and medical cover in case of accidents, helping you recover without worry."
+    annualLimit: 40000, // Adjusted
+    details: "Provides financial support and medical cover in case of minor accidents, helping you recover with less worry."
   }
 ];
 
@@ -78,6 +78,7 @@ export default function InsurancePage() {
         // Ensure the stored policy is one of the available policies
         const isValidPolicy = availablePoliciesData.find(p => p.id === storedPolicy.id);
         if (isValidPolicy) {
+          // Update active policy with potentially new data from availablePoliciesData
           setActivePolicy(isValidPolicy);
         } else {
           localStorage.removeItem(ACTIVE_POLICY_STORAGE_KEY); // Clear invalid stored policy
@@ -103,7 +104,7 @@ export default function InsurancePage() {
     if (!selectedPolicy) return;
 
     if (activePolicy?.id === selectedPolicy.id) {
-      toast({ title: "Already Active", description: `You are already subscribed to ${selectedPolicy.name}.`, variant: "default" });
+      toast({ title: "Already Active", description: `You are already covered by ${selectedPolicy.name}.`, variant: "default" });
       return;
     }
 
@@ -111,7 +112,7 @@ export default function InsurancePage() {
     localStorage.setItem(ACTIVE_POLICY_STORAGE_KEY, JSON.stringify(selectedPolicy));
     toast({
       title: "Investment Successful!",
-      description: `You are now covered by ${selectedPolicy.name}. First premium of ZWL ${selectedPolicy.premium} simulated.`,
+      description: `You are now covered by ${selectedPolicy.name}. First premium of ZWL ${selectedPolicy.premium.toFixed(2)} processed.`,
       className: "bg-accent text-accent-foreground",
       duration: 5000,
     });
