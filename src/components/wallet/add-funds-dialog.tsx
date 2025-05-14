@@ -31,7 +31,7 @@ export function AddFundsDialog({ onAddFunds }: AddFundsDialogProps) {
     }
     onAddFunds(numericAmount);
     toast({
-      title: "Funds Added (Simulated)",
+      title: "Funds Added",
       description: `ZWL ${numericAmount.toFixed(2)} successfully added to your wallet.`,
       className: "bg-accent text-accent-foreground"
     });
@@ -50,7 +50,7 @@ export function AddFundsDialog({ onAddFunds }: AddFundsDialogProps) {
         <DialogHeader>
           <DialogTitle>Add Funds to Wallet</DialogTitle>
           <DialogDescription>
-            Enter the amount you wish to add. This is a simulated transaction.
+            Enter the amount you wish to add to your wallet.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">

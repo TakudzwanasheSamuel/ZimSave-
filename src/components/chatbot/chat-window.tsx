@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChatMessage, type ChatMessageProps } from "./chat-message";
 import { financialHealthChatbot } from "@/ai/flows/financial-health-chatbot";
-import { Send, Languages, Loader2 } from "lucide-react";
+import { Send, Languages, Loader2, MessageCircle } from "lucide-react"; // Added MessageCircle
 import { useToast } from "@/hooks/use-toast";
 
 type Language = "en" | "sn" | "nd";
@@ -22,7 +22,6 @@ export function ChatWindow() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Scroll to bottom when new messages are added
     if (scrollAreaRef.current) {
       const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
       if (viewport) {
@@ -72,7 +71,7 @@ export function ChatWindow() {
   return (
     <div className="flex h-[calc(100vh-10rem)] flex-col rounded-lg border bg-card shadow-lg md:h-[calc(100vh-12rem)]">
       <div className="flex items-center justify-between border-b p-3">
-        <h2 className="text-lg font-semibold text-primary">AI Financial & Health Advisor</h2>
+        <h2 className="text-lg font-semibold text-primary">ZimSave+ AI Advisor</h2>
         <div className="flex items-center space-x-2">
           <Languages className="h-5 w-5 text-muted-foreground" />
           <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
@@ -93,7 +92,7 @@ export function ChatWindow() {
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground py-8">
               <MessageCircle size={48} className="mx-auto mb-2" />
-              <p>Welcome to the ZimVest AI Advisor!</p>
+              <p>Welcome to the ZimSave+ AI Advisor!</p>
               <p>Ask me about financial literacy, health tips, or group savings.</p>
               <p className="mt-2">Select your preferred language and type your question below.</p>
             </div>

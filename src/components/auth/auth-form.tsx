@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuthSimulation } from "@/hooks/use-auth-simulation";
-import { PiggyBank, Briefcase } from "lucide-react"; // Example icons
+import { useAuth } from "@/hooks/use-auth"; // Updated import
+import { Briefcase } from "lucide-react"; // Example icon, can be changed
 
 export function AuthForm() {
   const [emailLogin, setEmailLogin] = useState("");
@@ -17,11 +17,10 @@ export function AuthForm() {
   const [phoneSignup, setPhoneSignup] = useState("");
   const [nameSignup, setNameSignup] = useState("");
   const [passwordSignup, setPasswordSignup] = useState("");
-  const { login, signup } = useAuthSimulation();
+  const { login, signup } = useAuth(); // Updated hook usage
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd validate password too. Here, just email is fine for simulation.
     login({ email: emailLogin }); 
   };
 
@@ -33,8 +32,8 @@ export function AuthForm() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="flex items-center mb-8 text-primary">
-        <Briefcase size={48} className="mr-3" />
-        <h1 className="text-4xl font-bold">ZimVest</h1>
+        <Briefcase size={48} className="mr-3" /> {/* Consider updating icon if needed */}
+        <h1 className="text-4xl font-bold">ZimSave+</h1>
       </div>
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader>

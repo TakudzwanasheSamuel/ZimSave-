@@ -38,7 +38,7 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
       return;
     }
     const newGroup = {
-      id: Date.now().toString(), // Simulated ID
+      id: Date.now().toString(), 
       name: groupName,
       contributionAmount: parseFloat(contributionAmount),
       contributionFrequency,

@@ -18,7 +18,7 @@ interface TransferFundsDialogProps {
 
 export function TransferFundsDialog({ currentBalance, onTransferFunds }: TransferFundsDialogProps) {
   const [amount, setAmount] = useState("");
-  const [recipient, setRecipient] = useState(""); // Could be an ID, phone number, etc.
+  const [recipient, setRecipient] = useState("");
   const [purpose, setPurpose] = useState("mukando");
   const [notes, setNotes] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -35,14 +35,14 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
       toast({ title: "Insufficient Funds", description: "You do not have enough funds for this transfer.", variant: "destructive" });
       return;
     }
-    if (!recipient && purpose !== 'other_internal') { // Recipient required unless it's an internal allocation
+    if (!recipient && purpose !== 'other_internal') {
       toast({ title: "Missing Recipient", description: "Please specify a recipient.", variant: "destructive" });
       return;
     }
 
     onTransferFunds(numericAmount, recipient, purpose);
     toast({
-      title: "Transfer Successful (Simulated)",
+      title: "Transfer Successful",
       description: `ZWL ${numericAmount.toFixed(2)} transferred.`,
       className: "bg-accent text-accent-foreground"
     });
@@ -63,7 +63,7 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
         <DialogHeader>
           <DialogTitle>Transfer Funds</DialogTitle>
           <DialogDescription>
-            Move funds from your wallet. This is a simulated transaction. Current Balance: ZWL {currentBalance.toFixed(2)}
+            Move funds from your wallet. Current Balance: ZWL {currentBalance.toFixed(2)}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">

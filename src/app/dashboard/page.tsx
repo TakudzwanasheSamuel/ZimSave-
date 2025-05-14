@@ -4,16 +4,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/page-header";
-import { useAuthSimulation } from "@/hooks/use-auth-simulation";
+import { useAuth } from "@/hooks/use-auth"; // Updated import
 import { Users, MessageCircle, Wallet, Bell, ArrowRight, DollarSign, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 export default function DashboardPage() {
-  const { user } = useAuthSimulation();
+  const { user } = useAuth(); // Updated hook usage
 
   const quickLinks = [
     { title: "My Mukando Groups", href: "/dashboard/mukando", icon: Users, description: "View and manage your savings groups.", color: "text-blue-500", image: "https://placehold.co/600x400.png", dataAiHint: "community savings"},
-    { title: "Financial Chatbot", href: "/dashboard/chatbot", icon: MessageCircle, description: "Get financial and health advice.", color: "text-green-500", image: "https://placehold.co/600x400.png", dataAiHint: "chat help" },
+    { title: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageCircle, description: "Chat with ZimSave+ AI for financial and health advice.", color: "text-green-500", image: "https://placehold.co/600x400.png", dataAiHint: "chat help" },
     { title: "My Wallet", href: "/dashboard/wallet", icon: Wallet, description: "Check balance and make transactions.", color: "text-yellow-500", image: "https://placehold.co/600x400.png", dataAiHint: "finance money" },
     { title: "Notifications", href: "/dashboard/notifications", icon: Bell, description: "See important updates and alerts.", color: "text-red-500", image: "https://placehold.co/600x400.png", dataAiHint: "alert message" },
   ];
@@ -28,7 +28,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
         <Card className="shadow-lg hover:shadow-xl transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Simulated Wallet Balance</CardTitle>
+            <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
             <DollarSign className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>

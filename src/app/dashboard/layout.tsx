@@ -1,15 +1,15 @@
 
-"use client"; // Required because of useAuthSimulation and useEffect for redirection
+"use client";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { AppHeader } from "@/components/layout/app-header";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
-import { useAuthSimulation } from "@/hooks/use-auth-simulation";
+import { useAuth } from "@/hooks/use-auth"; // Updated import
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuthSimulation();
+  const { isAuthenticated, isLoading } = useAuth(); // Updated hook usage
   const router = useRouter();
 
   useEffect(() => {

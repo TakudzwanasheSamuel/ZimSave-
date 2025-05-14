@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ZimVest",
-  description: "Fintech and HealthTech for Zimbabwe's informal sector.",
+  title: "ZimSave+",
+  description: "Your partner for savings, finance, and health in Zimbabwe.",
   manifest: "/manifest.json", // Added for PWA
 };
 

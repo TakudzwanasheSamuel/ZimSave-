@@ -20,7 +20,7 @@ const mockTransactions: Transaction[] = [
 ];
 
 export default function WalletPage() {
-  const [balance, setBalance] = useState(3100.00); // Initial simulated balance
+  const [balance, setBalance] = useState(3100.00); // Initial balance
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
 
   const handleAddFunds = (amount: number) => {
@@ -94,7 +94,7 @@ export default function WalletPage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[300px] md:h-[400px]"> {/* Adjust height as needed */}
+          <ScrollArea className="h-[300px] md:h-[400px]">
             {transactions.length > 0 ? (
               transactions.map((tx) => <TransactionItem key={tx.id} transaction={tx} />)
             ) : (
