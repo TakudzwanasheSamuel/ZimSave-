@@ -1,13 +1,13 @@
 
 import { cn } from "@/lib/utils";
-import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, PiggyBank, AlertTriangle } from "lucide-react"; // Added more icons
+import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, PiggyBank, AlertTriangle } from "lucide-react";
 
 export interface Transaction {
   id: string;
   type: "deposit" | "withdrawal" | "transfer_in" | "transfer_out" | "mukando" | "goal" | "purchase" | "fee";
   amount: number;
   description: string;
-  date: string; // ISO string or formatted date
+  date: string; 
   status: "completed" | "pending" | "failed";
 }
 
@@ -51,7 +51,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
         </div>
       </div>
       <div className={cn("font-semibold", amountColor)}>
-        {amountPrefix} ZWL {transaction.amount.toFixed(2)}
+        {amountPrefix} ${transaction.amount.toFixed(2)} USD
       </div>
     </div>
   );

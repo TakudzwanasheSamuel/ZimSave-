@@ -15,50 +15,50 @@ const availablePoliciesData: HealthPolicy[] = [
   {
     id: "basic_health_cover",
     name: "Basic Health Cover",
-    premium: 200, // Updated from 500
+    premium: 2.00, // Micro premium
     frequency: "monthly",
-    coverageHighlights: ["GP Consultations", "Prescribed Medication (Basic)", "Emergency Ambulance"],
+    coverageHighlights: ["Tele-Doctor Consultations", "Basic Prescribed Medication", "Emergency Hotline Access"],
     icon: Heart,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "medical health",
-    annualLimit: 25000, // Adjusted for lower premium
-    details: "Essential health services for peace of mind. Covers day-to-day medical needs and basic emergencies."
+    annualLimit: 250, // Micro annual limit
+    details: "Essential remote health services for peace of mind. Covers basic tele-medical needs."
   },
   {
     id: "family_vitality_plan",
     name: "Family Vitality Plan",
-    premium: 750, // Updated from 1800
+    premium: 7.50, // Micro premium
     frequency: "monthly",
-    coverageHighlights: ["Covers 2 Adults + 2 Children", "Select Specialist Visits", "Basic Maternity Benefits (Waiting Period Applies)"],
+    coverageHighlights: ["Covers 1 Adult + 1 Child (Tele-Doctor)", "Select Wellness Tips", "Basic Virtual Consults"],
     icon: Users,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "family protection",
-    annualLimit: 100000, // Adjusted
-    details: "Affordable cover for the whole family, ensuring access to essential healthcare when needed."
+    annualLimit: 750, // Micro annual limit
+    details: "Affordable virtual cover for a small family, ensuring access to basic remote healthcare."
   },
   {
     id: "senior_wellness_shield",
     name: "Senior Wellness Shield",
-    premium: 400, // Updated from 950
+    premium: 4.00, // Micro premium
     frequency: "monthly",
-    coverageHighlights: ["Chronic Condition Support", "Annual Health Check-up", "Limited Optical & Dental"],
+    coverageHighlights: ["Chronic Condition Info Line", "Annual Wellness Call", "Limited Health Reminders"],
     icon: ShieldCheck,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "elderly care",
-    annualLimit: 60000, // Adjusted
-    details: "Tailored for seniors, focusing on wellness, chronic care support, and maintaining a healthy lifestyle."
+    annualLimit: 400, // Micro annual limit
+    details: "Tailored for seniors, focusing on virtual wellness support and health information."
   },
    {
-    id: "accident_protect_plus",
-    name: "Accident Protect Plus",
-    premium: 150, // Updated from 300
+    id: "accident_protect_lite", // Renamed for "micro"
+    name: "Accident Protect Lite",
+    premium: 1.50, // Micro premium
     frequency: "monthly",
-    coverageHighlights: ["Accidental Injury Treatment (Basic)", "Hospital Cash (Limited Days)", "Partial Disability Support"],
+    coverageHighlights: ["Minor Accidental Injury Info", "First Aid Guidance Call", "Small Emergency Fund Access (conditions apply)"],
     icon: Briefcase,
     imagePlaceholder: "https://placehold.co/600x400.png",
     dataAiHint: "safety insurance",
-    annualLimit: 40000, // Adjusted
-    details: "Provides financial support and medical cover in case of minor accidents, helping you recover with less worry."
+    annualLimit: 150, // Micro annual limit
+    details: "Provides basic information and support for minor accidents, helping with initial guidance."
   }
 ];
 
@@ -75,13 +75,11 @@ export default function InsurancePage() {
     if (storedPolicyJson) {
       try {
         const storedPolicy = JSON.parse(storedPolicyJson) as HealthPolicy;
-        // Ensure the stored policy is one of the available policies
         const isValidPolicy = availablePoliciesData.find(p => p.id === storedPolicy.id);
         if (isValidPolicy) {
-          // Update active policy with potentially new data from availablePoliciesData
           setActivePolicy(isValidPolicy);
         } else {
-          localStorage.removeItem(ACTIVE_POLICY_STORAGE_KEY); // Clear invalid stored policy
+          localStorage.removeItem(ACTIVE_POLICY_STORAGE_KEY);
         }
       } catch (error) {
         console.error("Failed to parse active policy from localStorage", error);
@@ -93,7 +91,6 @@ export default function InsurancePage() {
 
   const handleSelectPolicy = (policy: HealthPolicy) => {
     if (activePolicy?.id === policy.id) {
-      // If it's already active, deselect (or do nothing)
       setSelectedPolicy(null);
       return;
     }
@@ -112,18 +109,18 @@ export default function InsurancePage() {
     localStorage.setItem(ACTIVE_POLICY_STORAGE_KEY, JSON.stringify(selectedPolicy));
     toast({
       title: "Investment Successful!",
-      description: `You are now covered by ${selectedPolicy.name}. First premium of ZWL ${selectedPolicy.premium.toFixed(2)} processed.`,
+      description: `You are now covered by ${selectedPolicy.name}. First premium of $${selectedPolicy.premium.toFixed(2)} USD processed.`,
       className: "bg-accent text-accent-foreground",
       duration: 5000,
     });
-    setSelectedPolicy(null); // Reset selection after investing
+    setSelectedPolicy(null); 
   };
   
   const handleCancelPolicy = () => {
     if (!activePolicy) return;
     const policyName = activePolicy.name;
     setActivePolicy(null);
-    setSelectedPolicy(null); // Also clear selection if it was the active policy
+    setSelectedPolicy(null); 
     localStorage.removeItem(ACTIVE_POLICY_STORAGE_KEY);
     toast({
         title: "Policy Cancelled",
@@ -134,7 +131,6 @@ export default function InsurancePage() {
   }
 
   if (isLoading) {
-    // Basic loading state, can be replaced with skeletons
     return <div className="container mx-auto p-4"><PageHeader title="Micro-Insurance" description="Loading plans..." /> <p>Loading...</p></div>;
   }
 
@@ -142,7 +138,7 @@ export default function InsurancePage() {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Micro-Insurance Marketplace"
-        description="Secure your health and well-being with affordable micro-insurance plans."
+        description="Secure your well-being with affordable micro-insurance plans."
       />
 
       {activePolicy ? (
@@ -161,9 +157,9 @@ export default function InsurancePage() {
           <CardContent>
             <h3 className="text-xl font-semibold text-primary mb-1">{activePolicy.name}</h3>
             <p className="text-lg text-muted-foreground mb-2">
-              Premium: <span className="font-bold text-primary">ZWL {activePolicy.premium.toFixed(2)}</span> / {activePolicy.frequency}
+              Premium: <span className="font-bold text-primary">${activePolicy.premium.toFixed(2)} USD</span> / {activePolicy.frequency}
             </p>
-            <p className="text-sm text-muted-foreground mb-1">Annual Limit: ZWL {activePolicy.annualLimit.toFixed(2)}</p>
+            <p className="text-sm text-muted-foreground mb-1">Annual Limit: ${activePolicy.annualLimit.toFixed(2)} USD</p>
             <p className="text-sm mb-3">{activePolicy.details}</p>
             <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                 {activePolicy.coverageHighlights.map(highlight => <li key={highlight}>{highlight}</li>)}
@@ -202,7 +198,7 @@ export default function InsurancePage() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <h3 className="text-lg font-semibold text-primary">Ready to Invest?</h3>
-                    <p className="text-sm text-muted-foreground">You've selected: <span className="font-bold">{selectedPolicy.name}</span> (ZWL {selectedPolicy.premium.toFixed(2)}/{selectedPolicy.frequency})</p>
+                    <p className="text-sm text-muted-foreground">You've selected: <span className="font-bold">{selectedPolicy.name}</span> (${selectedPolicy.premium.toFixed(2)} USD/{selectedPolicy.frequency})</p>
                 </div>
                 <Button 
                     size="lg" 

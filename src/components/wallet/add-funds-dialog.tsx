@@ -32,7 +32,7 @@ export function AddFundsDialog({ onAddFunds }: AddFundsDialogProps) {
     onAddFunds(numericAmount);
     toast({
       title: "Funds Added",
-      description: `ZWL ${numericAmount.toFixed(2)} successfully added to your wallet.`,
+      description: `$${numericAmount.toFixed(2)} USD successfully added to your wallet.`,
       className: "bg-accent text-accent-foreground"
     });
     setAmount("");
@@ -50,15 +50,15 @@ export function AddFundsDialog({ onAddFunds }: AddFundsDialogProps) {
         <DialogHeader>
           <DialogTitle>Add Funds to Wallet</DialogTitle>
           <DialogDescription>
-            Enter the amount you wish to add to your wallet.
+            Enter the amount (USD) you wish to add to your wallet.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div>
-            <Label htmlFor="amount-add">Amount (ZWL)</Label>
+            <Label htmlFor="amount-add">Amount (USD)</Label>
             <div className="relative mt-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <span className="text-muted-foreground sm:text-sm">ZWL</span>
+                    <span className="text-muted-foreground sm:text-sm">$</span>
                 </div>
                 <Input
                     id="amount-add"
@@ -66,9 +66,10 @@ export function AddFundsDialog({ onAddFunds }: AddFundsDialogProps) {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="0.00"
-                    className="pl-12" 
+                    className="pl-7" 
                     required
-                    step="any"
+                    step="0.01"
+                    min="0.01"
                 />
             </div>
           </div>

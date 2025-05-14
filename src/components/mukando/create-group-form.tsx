@@ -43,7 +43,7 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
       contributionAmount: parseFloat(contributionAmount),
       contributionFrequency,
       description,
-      members: 1, // Admin is the first member
+      members: 1, 
       currentPool: 0,
     };
     onGroupCreate(newGroup);
@@ -51,7 +51,7 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
       title: "Group Created!",
       description: `"${groupName}" has been successfully created.`,
     });
-    setOpen(false); // Close dialog
+    setOpen(false); 
   };
 
   return (
@@ -62,18 +62,20 @@ export function CreateGroupForm({ onGroupCreate, setOpen }: CreateGroupFormProps
           id="groupName"
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
-          placeholder="e.g., Harare Savings Club"
+          placeholder="e.g., Community Savers Club"
           required
         />
       </div>
       <div>
-        <Label htmlFor="contributionAmount">Contribution Amount (ZWL)</Label>
+        <Label htmlFor="contributionAmount">Contribution Amount (USD)</Label>
         <Input
           id="contributionAmount"
           type="number"
           value={contributionAmount}
           onChange={(e) => setContributionAmount(e.target.value)}
-          placeholder="e.g., 500"
+          placeholder="e.g., 5.00"
+          step="0.01"
+          min="0.01"
           required
         />
       </div>

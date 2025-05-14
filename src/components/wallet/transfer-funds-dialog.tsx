@@ -43,7 +43,7 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
     onTransferFunds(numericAmount, recipient, purpose);
     toast({
       title: "Transfer Successful",
-      description: `ZWL ${numericAmount.toFixed(2)} transferred.`,
+      description: `$${numericAmount.toFixed(2)} USD transferred.`,
       className: "bg-accent text-accent-foreground"
     });
     setAmount("");
@@ -63,15 +63,15 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
         <DialogHeader>
           <DialogTitle>Transfer Funds</DialogTitle>
           <DialogDescription>
-            Move funds from your wallet. Current Balance: ZWL {currentBalance.toFixed(2)}
+            Move funds from your wallet. Current Balance: ${currentBalance.toFixed(2)} USD
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div>
-            <Label htmlFor="amount-transfer">Amount (ZWL)</Label>
+            <Label htmlFor="amount-transfer">Amount (USD)</Label>
              <div className="relative mt-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <span className="text-muted-foreground sm:text-sm">ZWL</span>
+                    <span className="text-muted-foreground sm:text-sm">$</span>
                 </div>
                 <Input
                     id="amount-transfer"
@@ -79,9 +79,10 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="0.00"
-                    className="pl-12" 
+                    className="pl-7" 
                     required
-                    step="any"
+                    step="0.01"
+                    min="0.01"
                 />
             </div>
           </div>

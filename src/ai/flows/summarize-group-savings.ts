@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -15,9 +16,9 @@ const SummarizeGroupSavingsInputSchema = z.object({
   groupName: z.string().describe('The name of the Mukando group.'),
   currentSavings: z
     .number()
-    .describe('The current total savings of the group in Zimbabwe Dollars.'),
+    .describe('The current total savings of the group in USD.'),
   upcomingNeeds: z.string().describe('Description of upcoming needs or expenses.'),
-  contributionAmount: z.number().describe('The standard contribution amount.'),
+  contributionAmount: z.number().describe('The standard contribution amount in USD.'),
   contributionFrequency: z
     .string()
     .describe('How often contributions happen (e.g., weekly, monthly).'),
@@ -44,13 +45,13 @@ const prompt = ai.definePrompt({
   prompt: `You are a helpful assistant that summarizes Mukando group savings information for group admins.
 
   Group Name: {{{groupName}}}
-  Current Savings (ZWL): {{{currentSavings}}}
+  Current Savings (USD): {{{currentSavings}}}
   Upcoming Needs: {{{upcomingNeeds}}}
-  Contribution Amount (ZWL): {{{contributionAmount}}}
+  Contribution Amount (USD): {{{contributionAmount}}}
   Contribution Frequency: {{{contributionFrequency}}}
 
   Please provide a concise and clear summary of the group's current savings status, highlighting upcoming needs and contribution details, in a way that is easy for all group members to understand.
-  Ensure the summary is no more than 200 words.
+  Ensure the summary is no more than 200 words and all monetary values are presented in USD.
   `,
 });
 

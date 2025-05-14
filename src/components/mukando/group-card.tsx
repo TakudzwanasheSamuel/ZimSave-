@@ -12,7 +12,7 @@ export interface MukandoGroup {
   contributionFrequency: string;
   members: number;
   currentPool: number;
-  targetPool?: number; // Optional for progress bar
+  targetPool?: number; 
   description?: string;
 }
 
@@ -26,11 +26,10 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
   const progress = group.targetPool ? (group.currentPool / group.targetPool) * 100 : 0;
 
   const handleTrackContribution = () => {
-    // Simulate tracking a contribution
     onTrackContribution(group.id, group.contributionAmount);
     toast({
       title: "Contribution Tracked",
-      description: `Contribution of ZWL ${group.contributionAmount} for "${group.name}" recorded.`,
+      description: `Contribution of $${group.contributionAmount.toFixed(2)} USD for "${group.name}" recorded.`,
       className: "bg-accent text-accent-foreground"
     });
   };
@@ -44,7 +43,7 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
       <CardContent className="space-y-3">
         <div className="flex items-center text-sm">
           <DollarSign className="mr-2 h-4 w-4 text-secondary" />
-          <span>Contribution: ZWL {group.contributionAmount.toFixed(2)}</span>
+          <span>Contribution: ${group.contributionAmount.toFixed(2)} USD</span>
         </div>
         <div className="flex items-center text-sm">
           <CalendarDays className="mr-2 h-4 w-4 text-secondary" />
@@ -56,7 +55,7 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
         </div>
         <div className="flex items-center text-sm font-semibold">
           <DollarSign className="mr-2 h-4 w-4 text-green-600" />
-          <span>Current Pool: ZWL {group.currentPool.toFixed(2)}</span>
+          <span>Current Pool: ${group.currentPool.toFixed(2)} USD</span>
         </div>
         {group.targetPool && (
           <div>
@@ -65,6 +64,7 @@ export function GroupCard({ group, onTrackContribution }: GroupCardProps) {
               <span>{Math.round(progress)}%</span>
             </div>
             <Progress value={progress} className="h-2" />
+            <p className="text-xs text-muted-foreground mt-1">Target: ${group.targetPool.toFixed(2)} USD</p>
           </div>
         )}
       </CardContent>

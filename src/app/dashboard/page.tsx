@@ -32,9 +32,9 @@ export default function DashboardPage() {
             <DollarSign className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">$1,250.75 ZWL</div>
+            <div className="text-2xl font-bold text-primary">$20.50 USD</div>
             <p className="text-xs text-muted-foreground">
-              +5.2% from last month
+              +1.2% from last month
             </p>
           </CardContent>
         </Card>
@@ -58,7 +58,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-xl font-bold text-accent">Basic Health Cover</div>
             <p className="text-xs text-muted-foreground">
-              Next premium due: 15 July
+              Next premium: $2.00 USD
             </p>
             <Link href="/dashboard/insurance" passHref>
               <Button variant="outline" size="sm" className="mt-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground">

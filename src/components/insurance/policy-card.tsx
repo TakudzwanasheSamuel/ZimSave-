@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import type { HealthPolicy } from "@/types/insurance";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Zap } from "lucide-react"; // Zap for "Select Plan"
+import { CheckCircle, Zap } from "lucide-react"; 
 
 interface PolicyCardProps {
   policy: HealthPolicy;
@@ -46,12 +46,12 @@ export function PolicyCard({ policy, isSelected, isActivePolicy, onSelect }: Pol
                 <Icon className={cn("h-8 w-8", imagePlaceholder ? "text-white/90" : "text-primary opacity-70")} />
             </div>
              <CardDescription className={cn(imagePlaceholder ? "text-gray-200" : "text-muted-foreground")}>
-                ZWL {premium.toFixed(2)} / {frequency}
+                ${premium.toFixed(2)} USD / {frequency}
             </CardDescription>
         </div>
       </CardHeader>
       <CardContent className="flex-grow pt-2 pb-4 px-4">
-        <p className="text-sm text-muted-foreground mb-1">Annual Limit: <span className="font-semibold text-card-foreground">ZWL {annualLimit.toLocaleString()}</span></p>
+        <p className="text-sm text-muted-foreground mb-1">Annual Limit: <span className="font-semibold text-card-foreground">${annualLimit.toLocaleString()} USD</span></p>
         <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{details}</p>
         
         <h4 className="font-semibold text-sm mb-1 text-card-foreground">Key Benefits:</h4>

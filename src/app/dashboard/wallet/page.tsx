@@ -12,15 +12,15 @@ import { DollarSign, ListChecks } from "lucide-react";
 import Image from "next/image";
 
 const mockTransactions: Transaction[] = [
-  { id: "1", type: "deposit", amount: 5000, description: "Salary Deposit", date: new Date(Date.now() - 86400000 * 2).toISOString(), status: "completed" },
-  { id: "2", type: "mukando", amount: 500, description: "Sunset Savers Contribution", date: new Date(Date.now() - 86400000).toISOString(), status: "completed" },
-  { id: "3", type: "purchase", amount: 1200, description: "Groceries at OK Zimbabwe", date: new Date(Date.now() - 86400000 / 2).toISOString(), status: "completed" },
-  { id: "4", type: "transfer_out", amount: 200, description: "Sent to J. Doe", date: new Date().toISOString(), status: "pending" },
-  { id: "5", type: "goal", amount: 1000, description: "School Fees Goal", date: new Date(Date.now() - 86400000 * 3).toISOString(), status: "completed" },
+  { id: "1", type: "deposit", amount: 50.00, description: "Initial Deposit", date: new Date(Date.now() - 86400000 * 2).toISOString(), status: "completed" },
+  { id: "2", type: "mukando", amount: 5.00, description: "Sunrise Savers Contribution", date: new Date(Date.now() - 86400000).toISOString(), status: "completed" },
+  { id: "3", type: "purchase", amount: 12.50, description: "Online Course Subscription", date: new Date(Date.now() - 86400000 / 2).toISOString(), status: "completed" },
+  { id: "4", type: "transfer_out", amount: 2.00, description: "Sent to J. Doe", date: new Date().toISOString(), status: "pending" },
+  { id: "5", type: "goal", amount: 10.00, description: "Phone Top-up Goal", date: new Date(Date.now() - 86400000 * 3).toISOString(), status: "completed" },
 ];
 
 export default function WalletPage() {
-  const [balance, setBalance] = useState(3100.00); // Initial balance
+  const [balance, setBalance] = useState(20.50); // Initial micro balance in USD
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
 
   const handleAddFunds = (amount: number) => {
@@ -30,7 +30,7 @@ export default function WalletPage() {
         id: Date.now().toString(),
         type: "deposit",
         amount,
-        description: "Funds Added via Top-Up",
+        description: "Funds Added",
         date: new Date().toISOString(),
         status: "completed",
       },
@@ -61,7 +61,7 @@ export default function WalletPage() {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="My Wallet"
-        description="Manage your funds and view transaction history."
+        description="Manage your USD funds and view transaction history."
       />
 
       <Card className="mb-6 shadow-xl">
@@ -74,7 +74,7 @@ export default function WalletPage() {
         </CardHeader>
         <CardContent>
           <div className="text-4xl font-bold text-primary">
-            ZWL {balance.toFixed(2)}
+            ${balance.toFixed(2)} USD
           </div>
           <div className="mt-4 flex space-x-3">
             <AddFundsDialog onAddFunds={handleAddFunds} />

@@ -9,36 +9,38 @@ import { CreateGroupForm } from "@/components/mukando/create-group-form";
 import { PlusCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle as ShadcnCardTitle } from "@/components/ui/card";
+
 
 const initialGroups: MukandoGroup[] = [
   {
     id: "1",
-    name: "Sunset Savers",
-    contributionAmount: 200,
+    name: "Sunrise Savers", // Renamed
+    contributionAmount: 5, // USD
     contributionFrequency: "weekly",
-    members: 12,
-    currentPool: 2400,
-    targetPool: 10000,
-    description: "Saving for year-end bonuses.",
+    members: 10,
+    currentPool: 50, // USD
+    targetPool: 200, // USD
+    description: "Saving for small personal goals.",
   },
   {
     id: "2",
-    name: "Business Boosters",
-    contributionAmount: 1000,
+    name: "Micro Venture Fund", // Renamed
+    contributionAmount: 10, // USD
     contributionFrequency: "monthly",
-    members: 8,
-    currentPool: 8000,
-    targetPool: 50000,
-    description: "Pooling funds for small business investments.",
+    members: 5,
+    currentPool: 50, // USD
+    targetPool: 250, // USD
+    description: "Pooling funds for tiny business ideas.",
   },
   {
     id: "3",
-    name: "Community Chest",
-    contributionAmount: 50,
+    name: "Neighborly Support", // Renamed
+    contributionAmount: 2, // USD
     contributionFrequency: "weekly",
-    members: 25,
-    currentPool: 1250,
-    description: "General savings for community needs.",
+    members: 15,
+    currentPool: 30, // USD
+    description: "Small contributions for mutual support.",
   },
 ];
 
@@ -62,7 +64,7 @@ export default function MukandoPage() {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Mukando Groups"
-        description="Manage your group savings and contributions."
+        description="Manage your group micro-savings and contributions."
         actions={
           <Dialog open={isCreateGroupDialogOpen} onOpenChange={setCreateGroupDialogOpen}>
             <DialogTrigger asChild>
@@ -83,7 +85,7 @@ export default function MukandoPage() {
       {groups.length === 0 ? (
         <Card className="mt-6 text-center">
           <CardHeader>
-            <CardTitle>No Groups Yet</CardTitle>
+            <ShadcnCardTitle>No Groups Yet</ShadcnCardTitle> {/* Explicitly use ShadcnCardTitle if needed */}
             <CardDescription>Start by creating your first Mukando group.</CardDescription>
           </CardHeader>
           <CardContent>
