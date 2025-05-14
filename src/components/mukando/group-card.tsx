@@ -2,10 +2,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link"; // Added Link import
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Users, DollarSign, CalendarDays, ArrowRight, Lightbulb, Loader2, Landmark } from "lucide-react";
+import { Users, DollarSign, CalendarDays, ArrowRight, Lightbulb, Loader2, Landmark, Eye } from "lucide-react"; // Added Eye
 import { useToast } from "@/hooks/use-toast";
 import { summarizeGroupSavings, type SummarizeGroupSavingsOutput } from "@/ai/flows/summarize-group-savings";
 import {
@@ -18,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { LoanRequestDialog } from "./loan-request-dialog"; // Import the new dialog
+import { LoanRequestDialog } from "./loan-request-dialog";
 
 export interface MukandoGroup {
   id: string;
@@ -30,13 +31,13 @@ export interface MukandoGroup {
   targetPool?: number;
   description?: string;
   upcomingNeeds?: string; 
-  activeLoanAmount?: number; // Simplified: just the total amount loaned out from this group
+  activeLoanAmount?: number; 
 }
 
 interface GroupCardProps {
   group: MukandoGroup;
   onTrackContribution: (groupId: string, amount: number) => void;
-  onRequestLoan: (groupId: string, loanAmount: number) => void; // New prop for loan request
+  onRequestLoan: (groupId: string, loanAmount: number) => void;
   userWalletBalance: number;
 }
 
@@ -93,7 +94,7 @@ export function GroupCard({ group, onTrackContribution, onRequestLoan, userWalle
     <Card className="shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between">
       <CardHeader>
         <CardTitle className="text-xl text-primary">{group.name}</CardTitle>
-        {group.description && <CardDescription>{group.description}</CardDescription>}
+        {group.description && <CardDescription className="truncate">{group.description}</CardDescription>}
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex items-center text-sm">
@@ -129,12 +130,14 @@ export function GroupCard({ group, onTrackContribution, onRequestLoan, userWalle
           </div>
         )}
         {group.upcomingNeeds && (
-          <p className="text-xs text-muted-foreground italic">Upcoming needs: {group.upcomingNeeds}</p>
+          <p className="text-xs text-muted-foreground italic truncate">Upcoming needs: {group.upcomingNeeds}</p>
         )}
       </CardContent>
       <CardFooter className="grid grid-cols-2 gap-2 pt-4">
-        <Button variant="outline" size="sm" className="w-full">
-          View Details <ArrowRight className="ml-2 h-4 w-4" />
+        <Button variant="outline" size="sm" className="w-full" asChild>
+          <Link href={`/dashboard/mukando/${group.id}`}>
+            <Eye className="mr-2 h-4 w-4" /> View Details
+          </Link>
         </Button>
         <Button size="sm" onClick={handleTrackContributionClick} className="bg-secondary hover:bg-secondary/90 text-primary-foreground w-full">
           Track Contribution
@@ -158,7 +161,7 @@ export function GroupCard({ group, onTrackContribution, onRequestLoan, userWalle
             size="sm" 
             onClick={() => setIsLoanRequestDialogOpen(true)}
             className="w-full border-primary text-primary hover:bg-primary/10"
-            disabled={group.currentPool <= 0} // Disable if pool is empty
+            disabled={group.currentPool <= 0}
         >
             <Landmark className="mr-2 h-4 w-4" /> Request Loan
         </Button>
