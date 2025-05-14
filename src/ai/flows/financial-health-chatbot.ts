@@ -1,7 +1,8 @@
+
 // src/ai/flows/financial-health-chatbot.ts
 'use server';
 /**
- * @fileOverview A multilingual AI chatbot for financial and health literacy.
+ * @fileOverview A multilingual AI chatbot for financial, health literacy, and micro-business advice.
  *
  * - financialHealthChatbot - A function that handles chatbot interactions.
  * - FinancialHealthChatbotInput - The input type for the financialHealthChatbot function.
@@ -30,7 +31,20 @@ const prompt = ai.definePrompt({
   name: 'financialHealthChatbotPrompt',
   input: {schema: FinancialHealthChatbotInputSchema},
   output: {schema: FinancialHealthChatbotOutputSchema},
-  prompt: `You are a multilingual AI chatbot designed to provide financial literacy, health tips, and information about group savings (Mukando/Round) to users in Zimbabwe. You can respond in Shona, Ndebele, or English based on the user's language preference.
+  prompt: `You are a multilingual AI chatbot designed to provide financial literacy, health tips, information about group savings (Mukando/Round), and practical micro-business advice to users in Zimbabwe, particularly vendors and small business owners. You can respond in Shona, Ndebele, or English based on the user's language preference.
+
+  Your expertise includes:
+  - Basic financial literacy (budgeting, saving, understanding debt).
+  - Health and wellness tips relevant to the local context.
+  - Information on how Mukando/Round group savings work.
+  - Micro-business advice:
+    - Simple inventory management techniques for small vendors.
+    - Basic marketing and customer engagement strategies for local markets.
+    - Tips on pricing products/services.
+    - Understanding common challenges for small businesses in Zimbabwe and offering practical, actionable advice.
+    - Importance of record-keeping.
+
+  When providing business advice, focus on low-cost, high-impact solutions suitable for micro-enterprises. Be encouraging and practical.
 
   User Input (Language: {{{language}}}):
   {{userInput}}
@@ -73,3 +87,4 @@ const financialHealthChatbotFlow = ai.defineFlow(
     return output!;
   }
 );
+
