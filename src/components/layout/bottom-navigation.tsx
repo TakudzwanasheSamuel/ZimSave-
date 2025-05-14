@@ -10,6 +10,7 @@ import {
   MessageCircle,
   Wallet,
   Bell,
+  HeartHandshake, // Added for Insurance
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -19,11 +20,13 @@ interface NavItem {
   icon: LucideIcon;
 }
 
+// Re-ordered for better flow
 const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/mukando", label: "Mukando", icon: Users },
-  { href: "/dashboard/chatbot", label: "Chatbot", icon: MessageCircle },
   { href: "/dashboard/wallet", label: "Wallet", icon: Wallet },
+  { href: "/dashboard/insurance", label: "Insurance", icon: HeartHandshake }, // Added Insurance
+  { href: "/dashboard/chatbot", label: "Chatbot", icon: MessageCircle },
   { href: "/dashboard/notifications", label: "Alerts", icon: Bell },
 ];
 
@@ -32,7 +35,7 @@ export function BottomNavigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
-      <div className="container mx-auto grid h-16 max-w-lg grid-cols-5 items-center px-2">
+      <div className="container mx-auto grid h-16 max-w-lg grid-cols-6 items-center px-1 sm:px-2"> {/* Adjusted to grid-cols-6 */}
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           return (
@@ -40,7 +43,7 @@ export function BottomNavigation() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex flex-col items-center justify-center rounded-md p-2 text-sm font-medium",
+                "group flex flex-col items-center justify-center rounded-md p-1.5 text-center text-sm font-medium", // Adjusted padding
                 isActive
                   ? "text-primary"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
@@ -48,12 +51,12 @@ export function BottomNavigation() {
             >
               <item.icon
                 className={cn(
-                  "h-6 w-6 shrink-0",
+                  "h-5 w-5 shrink-0 sm:h-6 sm:w-6", // Adjusted icon size
                   isActive ? "text-primary" : "text-muted-foreground group-hover:text-accent-foreground"
                 )}
                 aria-hidden="true"
               />
-              <span className="mt-1 text-xs truncate">{item.label}</span>
+              <span className="mt-1 text-[10px] sm:text-xs truncate">{item.label}</span> {/* Adjusted font size */}
             </Link>
           );
         })}

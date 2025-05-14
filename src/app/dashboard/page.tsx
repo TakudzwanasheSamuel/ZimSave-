@@ -4,18 +4,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/page-header";
-import { useAuth } from "@/hooks/use-auth"; // Updated import
+import { useAuth } from "@/hooks/use-auth";
 import { Users, MessageCircle, Wallet, Bell, ArrowRight, DollarSign, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 export default function DashboardPage() {
-  const { user } = useAuth(); // Updated hook usage
+  const { user } = useAuth(); 
 
   const quickLinks = [
-    { title: "My Mukando Groups", href: "/dashboard/mukando", icon: Users, description: "View and manage your savings groups.", color: "text-blue-500", image: "https://placehold.co/600x400.png", dataAiHint: "community savings"},
-    { title: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageCircle, description: "Chat with ZimSave+ AI for financial and health advice.", color: "text-green-500", image: "https://placehold.co/600x400.png", dataAiHint: "chat help" },
-    { title: "My Wallet", href: "/dashboard/wallet", icon: Wallet, description: "Check balance and make transactions.", color: "text-yellow-500", image: "https://placehold.co/600x400.png", dataAiHint: "finance money" },
-    { title: "Notifications", href: "/dashboard/notifications", icon: Bell, description: "See important updates and alerts.", color: "text-red-500", image: "https://placehold.co/600x400.png", dataAiHint: "alert message" },
+    { title: "My Mukando Groups", href: "/dashboard/mukando", icon: Users, description: "View and manage your savings groups.", color: "text-blue-500", image: "https://placehold.co/600x400.png", dataAiHint: "community savings", label: "Groups"},
+    { title: "AI Chatbot", href: "/dashboard/chatbot", icon: MessageCircle, description: "Chat with ZimSave+ AI for financial and health advice.", color: "text-green-500", image: "https://placehold.co/600x400.png", dataAiHint: "chat help", label: "Chatbot"},
+    { title: "My Wallet", href: "/dashboard/wallet", icon: Wallet, description: "Check balance and make transactions.", color: "text-yellow-500", image: "https://placehold.co/600x400.png", dataAiHint: "finance money", label: "Wallet"},
+    { title: "Notifications", href: "/dashboard/notifications", icon: Bell, description: "See important updates and alerts.", color: "text-red-500", image: "https://placehold.co/600x400.png", dataAiHint: "alert message", label: "Alerts"},
   ];
 
   return (
@@ -60,7 +60,11 @@ export default function DashboardPage() {
             <p className="text-xs text-muted-foreground">
               Next premium due: 15 July
             </p>
-            <Button variant="outline" size="sm" className="mt-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground">Manage Policy</Button>
+            <Link href="/dashboard/insurance" passHref>
+              <Button variant="outline" size="sm" className="mt-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+                Manage Policy
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
