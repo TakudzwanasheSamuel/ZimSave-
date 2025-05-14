@@ -279,17 +279,12 @@ const SidebarInset = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"main"> // Changed to main for semantic reasons, can be div
 >(({ className, ...props }, ref) => {
-  const { open, isMobile } = useSidebar();
+  // const { open, isMobile } = useSidebar(); // No longer needed for margin calculation
   return (
     <main // Changed to main
       ref={ref}
       className={cn(
-        "relative flex min-h-svh flex-1 flex-col bg-background transition-[margin-left] duration-200 ease-in-out",
-        // Adjust margin based on sidebar state for non-mobile
-        !isMobile && {
-          "md:ml-[var(--sidebar-width)]": open,
-          "md:ml-[var(--sidebar-width-icon)]": !open,
-        },
+        "relative flex min-h-svh flex-1 flex-col bg-background", // Removed transition-[margin-left] and conditional margins
         className
       )}
       {...props}
