@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from "@/hooks/use-toast";
 import { Target } from "lucide-react";
 import type { SavingsGoal } from "@/types/wallet";
+import { cn } from "@/lib/utils"; // Added missing import
 
 interface CreateSavingsGoalDialogProps {
   isOpen: boolean;
