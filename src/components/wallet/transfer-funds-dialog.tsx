@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRightLeft } from "lucide-react";
+// Removed Transaction type import as it's not directly used for type definitions here.
+// The onTransferFunds callback defines the structure.
 
 interface TransferFundsDialogProps {
   currentBalance: number;
@@ -19,7 +21,7 @@ interface TransferFundsDialogProps {
 export function TransferFundsDialog({ currentBalance, onTransferFunds }: TransferFundsDialogProps) {
   const [amount, setAmount] = useState("");
   const [recipient, setRecipient] = useState("");
-  const [purpose, setPurpose] = useState("mukando");
+  const [purpose, setPurpose] = useState("mukando"); // Default to mukando
   const [notes, setNotes] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
@@ -35,20 +37,22 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
       toast({ title: "Insufficient Funds", description: "You do not have enough funds for this transfer.", variant: "destructive" });
       return;
     }
-    if (!recipient && purpose !== 'other_internal') {
+    // "other_internal" might not need a recipient, but other types generally do.
+    if (!recipient && purpose !== 'other_internal' && purpose !== 'savings_goal_contribution') { 
       toast({ title: "Missing Recipient", description: "Please specify a recipient.", variant: "destructive" });
       return;
     }
 
-    onTransferFunds(numericAmount, recipient, purpose);
+    onTransferFunds(numericAmount, recipient, purpose); // 'savings_goal_contribution' is now handled by AddToGoalDialog
     toast({
-      title: "Transfer Successful",
-      description: `$${numericAmount.toFixed(2)} USD transferred.`,
+      title: "Transfer Initiated", // Changed from "Successful" as it might be pending
+      description: `$${numericAmount.toFixed(2)} USD transfer for ${purpose} has been initiated.`,
       className: "bg-accent text-accent-foreground"
     });
     setAmount("");
     setRecipient("");
     setNotes("");
+    setPurpose("mukando"); // Reset purpose to default
     setIsOpen(false);
   };
 
@@ -94,22 +98,29 @@ export function TransferFundsDialog({ currentBalance, onTransferFunds }: Transfe
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="mukando">Mukando Contribution</SelectItem>
-                <SelectItem value="savings_goal">Savings Goal</SelectItem>
+                {/* Removed "Savings Goal" as it's handled separately for better UX */}
                 <SelectItem value="peer_transfer">Peer Transfer</SelectItem>
                 <SelectItem value="bill_payment">Bill Payment</SelectItem>
-                <SelectItem value="other_internal">Internal Allocation</SelectItem>
+                <SelectItem value="other_internal">Other Internal Allocation</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          {purpose !== "other_internal" && (
+          {/* Conditional recipient input based on purpose */}
+          {(purpose === "peer_transfer" || purpose === "bill_payment" || purpose === "mukando") && (
             <div>
-              <Label htmlFor="recipient">Recipient</Label>
+              <Label htmlFor="recipient">
+                {purpose === "peer_transfer" ? "Recipient (Phone/Email)" : 
+                 purpose === "mukando" ? "Mukando Group Name" : "Biller Name"}
+              </Label>
               <Input
                 id="recipient"
                 value={recipient}
                 onChange={(e) => setRecipient(e.target.value)}
-                placeholder={purpose === "peer_transfer" ? "Recipient's Phone or Email" : "Group Name / Goal Name"}
-                required={purpose !== "other_internal"}
+                placeholder={
+                  purpose === "peer_transfer" ? "e.g., +26377XXXXXXX or name@example.com" :
+                  purpose === "mukando" ? "e.g., Sunrise Savers" : "e.g., ZESA, TelOne"
+                }
+                required
               />
             </div>
           )}

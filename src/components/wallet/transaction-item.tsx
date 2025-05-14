@@ -1,15 +1,7 @@
 
 import { cn } from "@/lib/utils";
-import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, PiggyBank, AlertTriangle } from "lucide-react";
-
-export interface Transaction {
-  id: string;
-  type: "deposit" | "withdrawal" | "transfer_in" | "transfer_out" | "mukando" | "goal" | "purchase" | "fee";
-  amount: number;
-  description: string;
-  date: string; 
-  status: "completed" | "pending" | "failed";
-}
+import { ArrowDownLeft, ArrowUpRight, ShoppingCart, Users, PiggyBank, AlertTriangle, Target } from "lucide-react";
+import type { Transaction } from "@/types/wallet"; // Updated import path
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -25,8 +17,8 @@ const getTransactionIcon = (type: Transaction["type"]) => {
       return <ArrowUpRight className="h-5 w-5 text-red-500" />;
     case "mukando":
       return <Users className="h-5 w-5 text-blue-500" />;
-    case "goal":
-      return <PiggyBank className="h-5 w-5 text-purple-500" />;
+    case "goal_contribution":
+      return <Target className="h-5 w-5 text-purple-500" />; // Changed from PiggyBank for goal_contribution
     case "purchase":
       return <ShoppingCart className="h-5 w-5 text-orange-500" />;
     default:
@@ -36,8 +28,10 @@ const getTransactionIcon = (type: Transaction["type"]) => {
 
 export function TransactionItem({ transaction }: TransactionItemProps) {
   const isCredit = transaction.type === "deposit" || transaction.type === "transfer_in";
-  const amountColor = isCredit ? "text-green-600" : "text-red-600";
-  const amountPrefix = isCredit ? "+" : "-";
+  // For goal contributions, treat as a "debit" from main balance perspective, but icon is specific
+  const amountColor = (transaction.type === "deposit" || transaction.type === "transfer_in") ? "text-green-600" : "text-red-600";
+  const amountPrefix = (transaction.type === "deposit" || transaction.type === "transfer_in") ? "+" : "-";
+
 
   return (
     <div className="flex items-center justify-between p-4 border-b last:border-b-0 hover:bg-muted/50 transition-colors">
