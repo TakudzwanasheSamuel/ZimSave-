@@ -31,11 +31,12 @@ import {
   HeartHandshake,
   LogOut,
   Briefcase,
+  Target, // Added Target icon
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils"; // Added this import
+import { cn } from "@/lib/utils";
 
 interface NavItem {
   href: string;
@@ -48,6 +49,7 @@ const sidebarNavItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tooltip: "Dashboard" },
   { href: "/dashboard/mukando", label: "Mukando Groups", icon: Users, tooltip: "Mukando Groups" },
   { href: "/dashboard/wallet", label: "My Wallet", icon: Wallet, tooltip: "My Wallet" },
+  { href: "/dashboard/wallet#savings-goals", label: "Savings Goals", icon: Target, tooltip: "Savings Goals" }, // Added Savings Goals
   { href: "/dashboard/insurance", label: "Insurance", icon: HeartHandshake, tooltip: "Insurance" },
   { href: "/dashboard/chatbot", label: "AI Chatbot", icon: MessageCircle, tooltip: "AI Chatbot" },
   { href: "/dashboard/notifications", label: "Notifications", icon: Bell, tooltip: "Notifications" },
@@ -150,7 +152,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <Link href={item.href} passHref legacyBehavior>
                   <SidebarMenuButton
-                    isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
+                    isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href.split('#')[0]))} // Adjust isActive for hash links
                     tooltip={{ children: item.tooltip, side: "right", align: "center" }}
                   >
                     <item.icon className="shrink-0" />
